@@ -1,7 +1,54 @@
 import Link from 'next/link';
 import styles from './page.module.css';
+import { listarEpisodios } from '@/lib/youtube';
+import { query } from '@/lib/db';
 
-export default function Home() {
+export const dynamic = 'force-dynamic';
+
+async function obterParceiros() {
+  try {
+    const r = await query(
+      "SELECT nome, logo_url, categoria FROM parceiro WHERE estado = 'activo' ORDER BY nome"
+    );
+    return r.rows;
+  } catch {
+    return null;
+  }
+}
+
+async function obterEpisodios() {
+  try {
+    const eps = await listarEpisodios(4);
+    if (!eps.length) return null;
+    return eps.map((e, i) => ({
+      etiqueta: `EP ${String(eps.length - i).padStart(2, '0')}`,
+      titulo: e.titulo,
+      url: `https://youtube.com/watch?v=${e.video_id}&list=PLWk5WB1OBQXA`,
+      estado: i === 0 ? 'novo' : 'no ar',
+    }));
+  } catch {
+    return null;
+  }
+}
+
+// Mostra o logótipo do parceiro se ele já o carregou; senão, o nome.
+function Logo({ nome, tamanho, db }) {
+  const cls = `${styles.logo} ${styles[tamanho]}`;
+  const p = db && db.find((x) => x.nome.toLowerCase() === nome.toLowerCase());
+  if (p && p.logo_url) {
+    return (
+      <div className={cls}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={p.logo_url} alt={nome} className={styles.logoImg} />
+      </div>
+    );
+  }
+  return <div className={cls}>{nome}</div>;
+}
+
+export default async function Home() {
+  const episodios = await obterEpisodios();
+  const parceirosDb = await obterParceiros();
   return (
     <main>
       <div className={styles.wrap}>
@@ -52,8 +99,20 @@ export default function Home() {
                 <a href="https://youtube.com/playlist?list=PLWk5WB1OBQXA" target="_blank" rel="noreferrer">Ver episódios →</a>
               </div>
               <ol className={styles.epsList}>
-                <li><i>EP 02</i><span>Dyno: os números do motor antes de tudo</span><em>em produção</em></li>
-                <li><i>EP 01</i><span>O carro cansado: primeiro contacto</span><em>no ar</em></li>
+                {episodios ? (
+                  episodios.map((e) => (
+                    <li key={e.etiqueta}>
+                      <i>{e.etiqueta}</i>
+                      <span><a href={e.url} target="_blank" rel="noreferrer">{e.titulo}</a></span>
+                      <em>{e.estado}</em>
+                    </li>
+                  ))
+                ) : (
+                  <>
+                    <li><i>EP 02</i><span>Dyno: os números do motor antes de tudo</span><em>em produção</em></li>
+                    <li><i>EP 01</i><span>O carro cansado: primeiro contacto</span><em>no ar</em></li>
+                  </>
+                )}
               </ol>
             </div>
           </div>
@@ -115,20 +174,22 @@ export default function Home() {
           </div>
           <div className={styles.tier}>
             <div className={styles.tl}>Co-Sponsor</div>
-            <div className={styles.logos}><div className={`${styles.logo} ${styles.lg}`}>Fuel Injection</div></div>
+            <div className={styles.logos}>
+              <Logo nome="Fuel Injection" tamanho="lg" db={parceirosDb} />
+            </div>
           </div>
           <div className={styles.tier}>
             <div className={styles.tl}>Patrocinador</div>
             <div className={styles.logos}>
-              <div className={`${styles.logo} ${styles.md}`}>ELTEL</div>
-              <div className={`${styles.logo} ${styles.md}`}>JPS Transportes</div>
+              <Logo nome="ELTEL" tamanho="md" db={parceirosDb} />
+              <Logo nome="JPS Transportes" tamanho="md" db={parceirosDb} />
             </div>
           </div>
           <div className={styles.tier}>
             <div className={styles.tl}>Parceiro Oficial</div>
             <div className={styles.logos}>
-              <div className={`${styles.logo} ${styles.sm}`}>Galp</div>
-              <div className={`${styles.logo} ${styles.sm}`}>The Shine</div>
+              <Logo nome="Galp" tamanho="sm" db={parceirosDb} />
+              <Logo nome="The Shine" tamanho="sm" db={parceirosDb} />
             </div>
           </div>
           <a className={styles.join} href="mailto:heike.pinto@fuelinjectiontech.com">

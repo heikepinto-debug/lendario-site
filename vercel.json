@@ -1,0 +1,5 @@
+{
+  "crons": [
+    { "path": "/api/episodios/sync", "schedule": "0 */6 * * *" }
+  ]
+}
