@@ -40,7 +40,7 @@ Isto cria as tabelas e regista os dois parceiros (Fuel Injection, The Shine).
 
 **Pronto.** O site está no ar no domínio que o Vercel te deu.
 
----
+--- 
 
 ## Ligar o teu subdomínio (quando quiseres)
 - Vercel → Settings → Domains → `lendario.fuelinjectiontech.com`.
