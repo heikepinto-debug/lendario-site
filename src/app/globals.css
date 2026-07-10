@@ -1,0 +1,10 @@
+:root{
+  --paper:#FAF9F5;--ink:#14140F;--olive:#678215;--olive-d:#4A5C0F;
+  --amber:#CCA762;--amber-d:#A87F3E;--grey:#6B6B63;--line:#E4E3DA;--red:#B4432E;
+  --display:'Anton',Impact,sans-serif;--body:'Inter',system-ui,sans-serif;--mono:'Roboto Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--olive);outline-offset:2px;border-radius:2px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
