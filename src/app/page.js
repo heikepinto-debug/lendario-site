@@ -20,11 +20,18 @@ async function obterEpisodios() {
   try {
     const eps = await listarEpisodios(4);
     if (!eps.length) return null;
+    // O "novo" é o de publicação mais recente (por data real, não por posição).
+    let idxNovo = 0;
+    for (let i = 1; i < eps.length; i++) {
+      const a = eps[i].publicado_em ? new Date(eps[i].publicado_em).getTime() : 0;
+      const b = eps[idxNovo].publicado_em ? new Date(eps[idxNovo].publicado_em).getTime() : 0;
+      if (a > b) idxNovo = i;
+    }
     return eps.map((e, i) => ({
       etiqueta: `EP ${String(eps.length - i).padStart(2, '0')}`,
       titulo: e.titulo,
       url: `https://youtube.com/watch?v=${e.video_id}&list=PLWk5WB1OBQXA`,
-      estado: i === 0 ? 'novo' : 'no ar',
+      estado: i === idxNovo ? 'novo' : 'no ar',
     }));
   } catch {
     return null;
@@ -58,6 +65,7 @@ export default async function Home() {
             <a href="#como">Como participar</a>
             <a href="#onde">Onde comprar</a>
             <a href="#parceiros">Parceiros</a>
+            <Link href="/parceiro" className={styles.navParceiro}>Área de parceiros</Link>
           </nav>
         </header>
 
