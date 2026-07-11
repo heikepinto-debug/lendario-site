@@ -43,7 +43,21 @@ async function obterEpisodios() {
   }
 }
 
-// Mostra o logótipo do parceiro se ele já o carregou; senão, o nome.
+// ESTILO DOS LOGOS: 'mono' (monocromático, mais unido) ou 'cor' (cores originais).
+// Para trocar, muda só esta linha e volta a publicar.
+const ESTILO_LOGOS = 'mono';
+
+// Mapa nome do parceiro -> ficheiro do logo (sem sufixo de estilo).
+const LOGOS = {
+  'fuel injection': 'fuel-injection',
+  'eltel': 'eltel',
+  'jps transportes': 'jps',
+  'galp': 'galp',
+  'the shine': 'the-shine',
+};
+
+// Mostra o logótipo do parceiro. Usa o ficheiro preparado se existir; se o
+// parceiro tiver carregado um logo próprio no portal, esse tem prioridade.
 function Logo({ nome, tamanho, db }) {
   const cls = `${styles.logo} ${styles[tamanho]}`;
   const p = db && db.find((x) => x.nome.toLowerCase() === nome.toLowerCase());
@@ -52,6 +66,15 @@ function Logo({ nome, tamanho, db }) {
       <div className={cls}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={p.logo_url} alt={nome} className={styles.logoImg} />
+      </div>
+    );
+  }
+  const base = LOGOS[nome.toLowerCase()];
+  if (base) {
+    return (
+      <div className={cls}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={`/parceiros/${base}-${ESTILO_LOGOS}.png`} alt={nome} className={styles.logoImg} />
       </div>
     );
   }
@@ -83,7 +106,7 @@ export default async function Home() {
             </h1>
             <p className={styles.lede}>
               Um Mazda 3 cansado, reconstruído do zero e filmado episódio a episódio
-              desde Junho. A 8 de Novembro é sorteado ao vivo, no Autódromo Internacional
+              desde Junho. Em Novembro é sorteado ao vivo, no Autódromo Internacional
               de Maputo. Compra num parceiro, regista o teu código, e o carro pode ser teu.
             </p>
             <div className={styles.cta}>
@@ -102,7 +125,7 @@ export default async function Home() {
               <img src="/carro.webp" alt="O carro do projecto, num estaleiro em Maputo" />
               <figcaption>
                 <b>Mazda 3 · 2008 · sedan · caixa manual</b>
-                <span>Em transformação desde Junho. Sorteado a 8 de Novembro.</span>
+                <span>Em transformação desde Junho. Sorteado em Novembro.</span>
               </figcaption>
             </figure>
 
@@ -183,7 +206,7 @@ export default async function Home() {
         <section className={styles.sp} id="parceiros">
           <div className={styles.spHead}>
             <h2>Quem torna isto possível</h2>
-            <p>Marcas que entraram no projecto e o carregam até 8 de Novembro.</p>
+            <p>Marcas que entraram no projecto e o carregam até ao sorteio.</p>
           </div>
           <div className={styles.tier}>
             <div className={styles.tl}>Co-Sponsor</div>
@@ -213,7 +236,7 @@ export default async function Home() {
         <footer className={styles.footer}>
           <div className={styles.brand} style={{ marginBottom: 14 }}>CANSADO <span>→</span> LENDÁRIO</div>
           A entrada no sorteio é gratuita com a tua compra nos parceiros. O bilhete do Fuel Injection Festival é vendido à parte.<br />
-          FIT Racing Team · Fuel Injection Technology · Sorteio a 8 de Novembro de 2026, Autódromo Internacional de Maputo.
+          FIT Racing Team · Fuel Injection Technology · Sorteio em Novembro de 2026, Autódromo Internacional de Maputo.
         </footer>
       </div>
     </main>
