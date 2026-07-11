@@ -18,20 +18,25 @@ async function obterParceiros() {
 
 async function obterEpisodios() {
   try {
-    const eps = await listarEpisodios(4);
+    const eps = await listarEpisodios(6);
     if (!eps.length) return null;
-    // O "novo" é o de publicação mais recente (por data real, não por posição).
-    let idxNovo = 0;
-    for (let i = 1; i < eps.length; i++) {
-      const a = eps[i].publicado_em ? new Date(eps[i].publicado_em).getTime() : 0;
-      const b = eps[idxNovo].publicado_em ? new Date(eps[idxNovo].publicado_em).getTime() : 0;
-      if (a > b) idxNovo = i;
-    }
-    return eps.map((e, i) => ({
-      etiqueta: `EP ${String(eps.length - i).padStart(2, '0')}`,
+
+    // Ordenar por data de publicação (mais antigo primeiro) para atribuir números:
+    // o vídeo mais antigo é o EP 01, o seguinte EP 02, e assim por diante.
+    const t = (e) => (e.publicado_em ? new Date(e.publicado_em).getTime() : 0);
+    const porData = [...eps].sort((a, b) => t(a) - t(b));
+    const numero = new Map();
+    porData.forEach((e, i) => numero.set(e.video_id, i + 1));
+
+    // Mostrar do mais recente para o mais antigo.
+    const maisRecentePrimeiro = [...eps].sort((a, b) => t(b) - t(a));
+    const idMaisRecente = maisRecentePrimeiro[0]?.video_id;
+
+    return maisRecentePrimeiro.map((e) => ({
+      etiqueta: `EP ${String(numero.get(e.video_id)).padStart(2, '0')}`,
       titulo: e.titulo,
       url: `https://youtube.com/watch?v=${e.video_id}&list=PLWk5WB1OBQXA`,
-      estado: i === idxNovo ? 'novo' : 'no ar',
+      estado: e.video_id === idMaisRecente ? 'novo' : 'no ar',
     }));
   } catch {
     return null;

@@ -1,34 +1,23 @@
-# Actualização: episódios por data + botão de parceiro no menu
+# Correcção: ordem/número dos episódios + alinhamento do botão
 
-Só **2 ficheiros** mudam. Ambos existem já no teu repo — é substituir.
+Os mesmos **2 ficheiros** de sempre. Substituir.
 
-## Ficheiros a substituir
 ```
-src/app/page.js            (episódio "novo" agora é o de data mais recente
-                            + link "Área de parceiros" no menu de topo)
-src/app/page.module.css    (estilo do botão de parceiro)
+src/app/page.js            (numeração e ordem dos episódios pela data real)
+src/app/page.module.css    (botão "Área de parceiros" alinhado no menu)
 ```
 
-## Como aplicar (o mais fácil: direto no GitHub)
+## O que corrige
 
-Para cada um dos 2 ficheiros:
-1. Abre o ficheiro no GitHub.
-2. Lápis (✏️) para editar.
-3. Substitui pelo conteúdo da mesma pasta neste delta.
-4. "Commit changes".
+- **Episódios:** o vídeo mais antigo é sempre o **EP 01**; a lista mostra do
+  mais recente (em cima, marcado "novo") para o mais antigo (em baixo). O número
+  já não depende da ordem em que o YouTube devolve os vídeos.
+- **Botão:** "Área de parceiros" fica alinhado certinho com os outros itens do menu.
 
-Ou, pelo GitHub Desktop: copia os 2 ficheiros por cima, commit + push.
+## Aplicar
 
-## O que muda no site
+Direto no GitHub (lápis → colar → commit) nos 2 ficheiros, ou pelo GitHub Desktop.
+O Vercel publica sozinho em 1-2 minutos.
 
-- No menu do topo aparece **"Área de parceiros"** (botão verde), que leva ao login.
-- Na lista de episódios, o rótulo **"novo"** passa a marcar o vídeo com a
-  data de publicação mais recente (em vez do primeiro da lista).
-
-O deploy já está a funcionar, por isso ao fazer commit o Vercel publica sozinho
-em 1-2 minutos.
-
-## Nota
-
-O `vercel.json` já o corrigiste no GitHub (o cron diário). Não precisas de mexer
-nele outra vez — só nestes 2 ficheiros.
+Depois do deploy, se quiseres ver a ordem corrigida na hora sem esperar,
+abre `/api/episodios/sync` uma vez no browser.
