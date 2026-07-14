@@ -13,6 +13,8 @@ const ERROS = {
   email_em_uso: 'Este email já está registado com outro número. Usa outro email.',
   email_invalido: 'Esse email não parece válido.',
   telefone_invalido: 'Esse número não parece um número moçambicano válido.',
+  data_nascimento_invalida: 'Indica a tua data de nascimento.',
+  menor_de_idade: 'Só podes participar se tiveres 18 anos ou mais.',
   nome_invalido: 'Escreve o teu nome completo.',
   sem_consentimento: 'Precisas de aceitar os termos para concorrer.',
   fora_do_periodo: 'O período de registo já terminou.',
@@ -41,6 +43,7 @@ function Form() {
       nome: fd.get('nome').trim(),
       email: fd.get('email').trim(),
       telefone: fd.get('telefone').trim(),
+      data_nascimento: fd.get('data_nascimento'),
       consent_sorteio: fd.get('consent') === 'on',
       optin_marketing: fd.get('optin') === 'on',
       via: 'manual',
@@ -98,9 +101,17 @@ function Form() {
         <input id="telefone" name="telefone" type="tel" placeholder="84 000 0000" required autoComplete="tel" />
         <div className={styles.hint}>É por aqui que te contactamos se ganhares.</div>
 
+        <label htmlFor="data_nascimento">Data de nascimento</label>
+        <input id="data_nascimento" name="data_nascimento" type="date" required />
+        <div className={styles.hint}>Só podes participar se tiveres 18 anos ou mais.</div>
+
         <label className={styles.check}>
           <input name="consent" type="checkbox" required />
-          <span>Aceito os termos do sorteio e autorizo o uso dos meus dados para a sua gestão.</span>
+          <span>
+            Li e aceito os{' '}
+            <a href="/termos" target="_blank" rel="noreferrer" className={styles.tcLink}>Termos e Condições</a>
+            {' '}do sorteio e autorizo o uso dos meus dados para a sua gestão.
+          </span>
         </label>
         <label className={styles.check}>
           <input name="optin" type="checkbox" />

@@ -20,6 +20,11 @@ export const CONFIG = {
   CUTOFF_REGISTOS: new Date('2026-11-07T23:59:59+02:00'),
   DATA_SORTEIO: '2026-11-08',
   YOUTUBE_PLAYLIST_ID: 'PLWk5WB1OBQXA',
+  // Idade mínima para participar (cláusula 4 dos T&C).
+  IDADE_MINIMA: 18,
+  // Versão dos T&C em vigor. Muda quando os T&C forem actualizados, para
+  // ficar registado qual versão cada pessoa aceitou.
+  TC_VERSAO: '2026-11-rascunho',
 };
 
 // Dado um valor de factura, quantas entradas atribui (usado no voucher e no site).

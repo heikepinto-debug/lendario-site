@@ -1,69 +1,91 @@
-# Painel de administração + anti-fraude
+# Emissão de vouchers + T&C + idade 18+ + auditoria de participantes
 
-Peça grande e nova. Traz o painel de admin completo e as defesas anti-fraude que
-falámos: tecto por pessoa, alertas, e auditoria dos parceiros.
+Pacote combinado. Junta tudo o que ainda não aplicaste (o "delta7" da emissão)
+com as novidades: Termos e Condições no site, confirmação de 18+ no registo, e
+auditoria de participantes por parceiro no painel de admin.
 
-## Ficheiros
+Aplica-se sobre o teu repo com o delta6 (admin) já aplicado — que é o teu caso.
+
+## IMPORTANTE: dependências novas
+
+Adiciona duas bibliotecas (pdf-lib, qrcode), já no `package.json` incluído.
+**Substitui o teu `package.json` pelo deste delta**, senão o build falha.
+
+## Ficheiros (22)
 
 **Novos:**
 ```
-src/lib/admin-auth.js                       login do admin
-src/lib/admin-sessao.js                     sessão do admin
-src/app/admin/page.js                       página de login
-src/app/admin/admin.module.css              estilos
-src/app/admin/painel/page.js                painel (protegido)
-src/app/admin/painel/painel-cliente.js      painel (interface)
-src/app/api/admin/login/route.js
-src/app/api/admin/logout/route.js
-src/app/api/admin/resumo/route.js
-src/app/api/admin/alertas/route.js
-src/app/api/admin/exportar/route.js
-drizzle/005_admin_e_antifraude.sql
-drizzle/006_criar_admin.sql
+src/lib/emissao.js                         lógica de emissão
+src/lib/pdf-voucher.js                     gera o PDF com QR
+src/app/api/admin/lotes/route.js           admin dá lotes
+src/app/api/admin/participantes/route.js   auditoria de participantes
+src/app/api/parceiro/emitir/route.js       parceiro emite + PDF
+src/app/api/parceiro/emissoes/route.js     histórico de emissões
+src/app/parceiro/painel/emitir-vouchers.js interface de emissão
+src/app/termos/page.js                     página de Termos e Condições
+src/app/termos/termos.module.css
+drizzle/007_emissao.sql
+drizzle/008_idade_e_tc.sql
 ```
 
 **A substituir:**
 ```
-src/lib/registar.js    (passa a aplicar o tecto por pessoa + gerar alertas)
-src/lib/config.js      (tecto = 30 entradas por pessoa, alerta aos 20)
+package.json                               (+ pdf-lib, qrcode)
+src/lib/registar.js                        (+ idade 18+, aceitação T&C)
+src/lib/config.js                          (+ idade mínima, versão T&C)
+src/app/registar/page.js                   (+ data nascimento, link T&C)
+src/app/registar/registar.module.css
+src/app/admin/painel/painel-cliente.js     (+ dar lotes, + registos por parceiro)
+src/app/admin/admin.module.css
+src/app/parceiro/painel/painel-cliente.js  (+ emitir vouchers)
+src/app/parceiro/parceiro.module.css
+src/app/page.js                            (+ link T&C no rodapé)
+src/app/page.module.css
 ```
 
 ## Passos
 
 ### 1. SQL na Neon (por esta ordem)
-- `drizzle/005_admin_e_antifraude.sql`  → tabelas de admin, sessões e alertas
-- `drizzle/006_criar_admin.sql`         → cria a tua conta de admin
+- `drizzle/007_emissao.sql`   → emissão de vouchers
+- `drizzle/008_idade_e_tc.sql` → data de nascimento + registo de aceitação dos T&C
 
 ### 2. Código
-Copia os ficheiros (GitHub Desktop é mais fácil), commit + push. O Vercel publica.
+GitHub Desktop: copia tudo (inclui o package.json), commit + push.
 
-### 3. Entrar
-```
-o-teu-site/admin
-```
-- email: admin@fuelinjectiontech.com
-- senha: LendarioAdmin2026  ← troca depois (diz-me a nova e gero o SQL)
+## O que passa a funcionar
 
-## O que o painel faz
+**Emissão de vouchers** (como falámos):
+- Admin dá lotes (+50/+100/+200) a cada parceiro no painel.
+- Parceiro emite no balcão: mete o valor → calcula os vouchers → gera PDF com
+  QR, link, código, data e nome do projecto. Regista valor + factura + atendente.
 
-- **Totais** — entradas, participantes, parceiros activos, alertas por rever.
-- **Salvaguarda** — botão para descarregar todas as entradas em CSV. Guarda isto
-  antes do sorteio: com ele, o sorteio corre mesmo sem internet no dia.
-- **Alertas** — sinaliza pessoas que se aproximam do tecto. Tu marcas "visto".
-- **Parceiros** — mostra a taxa de activação de cada um (vouchers emitidos vs.
-  mesmo usados). Uma taxa muito baixa com muitos vouchers = sinal de aviso.
-- **Quem tem mais entradas** — top de pessoas por nº de entradas.
+**Termos e Condições:**
+- Página em `/termos` (e link no rodapé da landing).
+- No registo, o participante tem de aceitar os T&C (checkbox liga à página).
 
-## As defesas anti-fraude (o que decidimos)
+**Idade 18+:**
+- O registo pede a data de nascimento e recusa quem não tenha 18 anos.
+- Fica guardado que aceitou os T&C e qual a versão.
 
-- **Tecto de 30 entradas por pessoa** (por telefone). Alguém que tente passar disto
-  é bloqueado. 30 = seis compras grandes de 25.000+ MZN — nunca incomoda um
-  comprador real, só o abuso óbvio.
-- **Alerta aos 20** — quem chega perto do tecto aparece no teu painel para reveres.
-- **Sem fricção no balcão** — não pedimos factura ao parceiro, como querias. A
-  defesa contra vouchers inflacionados é a auditoria (taxa de activação) + o
-  limite de lote que já existe (primeiro lote automático, seguintes com a tua
-  aprovação).
+**Auditoria de participantes** (novo bloco no painel de admin):
+- "Registos por parceiro": de onde vêm os participantes — entradas e pessoas
+  distintas por loja.
+- Quantos aceitaram marketing, do total.
 
-Se quiseres mudar o tecto (30) ou o limiar de alerta (20), estão no topo do
-`src/lib/config.js` — dois números.
+## Sobre os T&C — LÊ ISTO
+
+Passei o teu documento para uma página do site, mas com pontos por fechar com o
+teu jurista. A página tem um aviso de "rascunho" bem visível. O mais importante:
+
+1. **Via gratuita (sem compra)** — o teu jurista marcou isto a vermelho. Em MZ
+   pode ser exigida uma forma de participar sem comprar. Se ele confirmar que sim,
+   o sistema TEM de mudar (permitir uma entrada sem voucher). NÃO publiques os T&C
+   como definitivos até fechares este ponto.
+2. **Limite por pessoa** — pus "existe um limite" no texto. Nós definimos 30.
+   Confirma com ele se queres o número explícito no documento.
+3. **Prazos das cláusulas 9.1/9.2** (manter livery, não vender) — deixei "a definir".
+   Diz-me os prazos e eu preencho.
+4. **Data** — está "Novembro de 2026" sem dia, a condizer com o site.
+
+Quando tiveres a versão final do jurista, dá-ma e actualizo a página exacta.
+A `TC_VERSAO` no config muda para a versão nova, e fica registado quem aceitou qual.

@@ -236,7 +236,8 @@ export default async function Home() {
         <footer className={styles.footer}>
           <div className={styles.brand} style={{ marginBottom: 14 }}>CANSADO <span>→</span> LENDÁRIO</div>
           A entrada no sorteio é gratuita com a tua compra nos parceiros. O bilhete do Fuel Injection Festival é vendido à parte.<br />
-          FIT Racing Team · Fuel Injection Technology · Sorteio em Novembro de 2026, Autódromo Internacional de Maputo.
+          FIT Racing Team · Fuel Injection Technology · Sorteio em Novembro de 2026, Autódromo Internacional de Maputo.<br />
+          <Link href="/termos" className={styles.footerLink}>Termos e Condições</Link>
         </footer>
       </div>
     </main>

@@ -90,3 +90,4 @@
 .logoImg{max-width:78%;max-height:82%;object-fit:contain}
 .navParceiro{display:inline-flex;align-items:center;font-weight:600;line-height:1;color:var(--olive)!important;border:1px solid var(--olive);padding:8px 15px;border-radius:99px}
 .navParceiro:hover{background:var(--olive);color:#fff!important}
+.footerLink{display:inline-block;margin-top:10px;color:var(--olive);font-weight:600;text-decoration:underline;font-size:12.5px}

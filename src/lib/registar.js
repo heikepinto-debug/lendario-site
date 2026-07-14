@@ -26,12 +26,30 @@ export function numeroBilhete(id) {
   return 'E-' + String(id).padStart(5, '0');
 }
 
+// Idade completa em anos, na data de referência.
+function idadeEmAnos(nascimento, agora) {
+  let idade = agora.getFullYear() - nascimento.getFullYear();
+  const m = agora.getMonth() - nascimento.getMonth();
+  if (m < 0 || (m === 0 && agora.getDate() < nascimento.getDate())) idade--;
+  return idade;
+}
+
 export async function registarCodigo(input) {
   const agora = input.agora || new Date();
 
   if (input.consent_sorteio !== true) throw new RegistoError('sem_consentimento', 422);
   if (agora > CONFIG.CUTOFF_REGISTOS) {
     throw new RegistoError('fora_do_periodo', 422, { cutoff: CONFIG.CUTOFF_REGISTOS.toISOString() });
+  }
+
+  // Idade mínima (cláusula 4 dos T&C). Aceita data de nascimento e confirma 18+.
+  const dataNasc = input.data_nascimento ? new Date(input.data_nascimento) : null;
+  if (!dataNasc || isNaN(dataNasc.getTime())) {
+    throw new RegistoError('data_nascimento_invalida', 422);
+  }
+  const idade = idadeEmAnos(dataNasc, agora);
+  if (idade < CONFIG.IDADE_MINIMA) {
+    throw new RegistoError('menor_de_idade', 422, { minima: CONFIG.IDADE_MINIMA });
   }
 
   const nome = String(input.nome || '').trim();
@@ -76,9 +94,9 @@ export async function registarCodigo(input) {
       const porEmail = await c.query('SELECT id FROM participante WHERE email = $1', [email]);
       if (porEmail.rowCount > 0) throw new RegistoError('email_em_uso', 409);
       const ins = await c.query(
-        `INSERT INTO participante (nome, email, telefone, consent_sorteio, optin_marketing, optin_em)
-         VALUES ($1, $2, $3, true, $4, ${optin ? 'now()' : 'NULL'}) RETURNING id`,
-        [nome, email, tel.value, optin]
+        `INSERT INTO participante (nome, email, telefone, consent_sorteio, optin_marketing, optin_em, data_nascimento, tc_versao, tc_aceite_em)
+         VALUES ($1, $2, $3, true, $4, ${optin ? 'now()' : 'NULL'}, $5, $6, now()) RETURNING id`,
+        [nome, email, tel.value, optin, input.data_nascimento, CONFIG.TC_VERSAO]
       );
       participante = { id: ins.rows[0].id };
       participanteNovo = true;

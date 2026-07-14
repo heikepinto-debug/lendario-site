@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '../parceiro.module.css';
+import EmitirVouchers from './emitir-vouchers';
 
 export default function PainelCliente({ inicial }) {
   const router = useRouter();
@@ -11,12 +12,14 @@ export default function PainelCliente({ inicial }) {
   const [aGuardar, setAGuardar] = useState(false);
   const fileRef = useRef(null);
 
-  useEffect(() => {
-    fetch('/api/parceiro/metricas')
-      .then((r) => r.json())
-      .then((d) => { if (d.ok) setDados(d); })
-      .catch(() => {});
-  }, []);
+  async function carregarMetricas() {
+    try {
+      const d = await fetch('/api/parceiro/metricas').then((r) => r.json());
+      if (d.ok) setDados(d);
+    } catch { /* ignora */ }
+  }
+
+  useEffect(() => { carregarMetricas(); }, []);
 
   const p = dados.parceiro;
   const m = dados.metricas;
@@ -104,6 +107,8 @@ export default function PainelCliente({ inicial }) {
             <div className={styles.cardL}>Entradas geradas por ti</div>
           </div>
         </section>
+
+        {p.estado === 'activo' && <EmitirVouchers onEmitido={carregarMetricas} />}
 
         <section className={styles.perfil}>
           <h2>O teu perfil</h2>

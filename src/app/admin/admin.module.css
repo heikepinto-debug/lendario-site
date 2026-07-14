@@ -53,3 +53,8 @@
   .blocoHead{flex-direction:column;align-items:flex-start;gap:10px}
   .tabela{font-size:12.5px}
 }
+.darBotoes{display:flex;gap:6px;justify-content:flex-end}
+.darBtn{font-family:var(--body);font-size:12px;font-weight:700;color:var(--olive-d);background:#EEF3E0;border:1px solid var(--olive);padding:6px 12px;border-radius:99px;cursor:pointer}
+.darBtn:hover{background:var(--olive);color:#fff}
+.darBtn:disabled{opacity:.5;cursor:wait}
+.painelMsg{font-size:14px;margin:8px 0}

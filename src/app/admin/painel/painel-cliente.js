@@ -8,17 +8,48 @@ export default function PainelAdmin() {
   const router = useRouter();
   const [dados, setDados] = useState(null);
   const [alertas, setAlertas] = useState([]);
+  const [lotes, setLotes] = useState([]);
+  const [participantes, setParticipantes] = useState(null);
+  const [aDar, setADar] = useState(null); // id do parceiro a receber lote
+  const [msgLote, setMsgLote] = useState('');
 
   async function carregar() {
-    const [r1, r2] = await Promise.all([
+    const [r1, r2, r3, r4] = await Promise.all([
       fetch('/api/admin/resumo').then((r) => r.json()),
       fetch('/api/admin/alertas').then((r) => r.json()),
+      fetch('/api/admin/lotes').then((r) => r.json()),
+      fetch('/api/admin/participantes').then((r) => r.json()),
     ]);
     if (r1.ok) setDados(r1);
     if (r2.ok) setAlertas(r2.alertas);
+    if (r3.ok) setLotes(r3.parceiros);
+    if (r4.ok) setParticipantes(r4);
   }
 
   useEffect(() => { carregar(); }, []);
+
+  async function darLote(parceiroId, quantidade) {
+    setADar(parceiroId);
+    setMsgLote('');
+    try {
+      const r = await fetch('/api/admin/lotes', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ parceiroId, quantidade }),
+      });
+      const d = await r.json();
+      if (d.ok) {
+        setMsgLote(`✓ ${d.criados} vouchers dados.`);
+        const r3 = await fetch('/api/admin/lotes').then((x) => x.json());
+        if (r3.ok) setLotes(r3.parceiros);
+      } else {
+        setMsgLote('Não foi possível criar o lote.');
+      }
+    } catch {
+      setMsgLote('Sem ligação.');
+    }
+    setADar(null);
+  }
 
   async function sair() {
     await fetch('/api/admin/logout', { method: 'POST' });
@@ -73,6 +104,39 @@ export default function PainelAdmin() {
           </p>
         </section>
 
+        {/* dar vouchers a parceiros */}
+        <section className={styles.bloco}>
+          <h2>Dar vouchers a parceiros</h2>
+          <p className={styles.nota}>
+            Aprova um lote de vouchers para um parceiro. Ele emite-os no balcão à
+            medida das vendas. Quando o lote esgotar, dás mais.
+          </p>
+          {msgLote && <p className={styles.painelMsg} style={{ color: 'var(--olive-d)' }}>{msgLote}</p>}
+          <table className={styles.tabela}>
+            <thead>
+              <tr><th>Parceiro</th><th>Total dado</th><th>Por emitir</th><th>Dar mais</th></tr>
+            </thead>
+            <tbody>
+              {lotes.map((p) => (
+                <tr key={p.id}>
+                  <td>{p.nome} {p.estado !== 'activo' && <em className={styles.inativo}>({p.estado})</em>}</td>
+                  <td>{p.total_aprovado}</td>
+                  <td><strong>{p.por_emitir}</strong></td>
+                  <td>
+                    <div className={styles.darBotoes}>
+                      {[50, 100, 200].map((q) => (
+                        <button key={q} onClick={() => darLote(p.id, q)} disabled={aDar === p.id} className={styles.darBtn}>
+                          +{q}
+                        </button>
+                      ))}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+
         {/* alertas */}
         {alertas.length > 0 && (
           <section className={styles.bloco}>
@@ -123,6 +187,32 @@ export default function PainelAdmin() {
             </tbody>
           </table>
         </section>
+
+        {/* registos por parceiro (de onde vêm) */}
+        {participantes && participantes.por_parceiro.length > 0 && (
+          <section className={styles.bloco}>
+            <h2>Registos por parceiro</h2>
+            <p className={styles.nota}>
+              De onde vêm os participantes: quantas entradas e quantas pessoas
+              distintas cada loja gerou. {participantes.consentimento && (
+                <>Do total de {participantes.consentimento.total} participantes,{' '}
+                {participantes.consentimento.com_marketing} aceitaram receber novidades.</>
+              )}
+            </p>
+            <table className={styles.tabela}>
+              <thead><tr><th>Parceiro</th><th>Entradas</th><th>Pessoas</th></tr></thead>
+              <tbody>
+                {participantes.por_parceiro.map((p) => (
+                  <tr key={p.id}>
+                    <td>{p.nome}</td>
+                    <td>{p.entradas}</td>
+                    <td>{p.pessoas}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        )}
 
         {/* top pessoas */}
         {dados.top_pessoas.length > 0 && (
