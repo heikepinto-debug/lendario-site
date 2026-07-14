@@ -16,16 +16,13 @@ export default function Termos() {
       <article className={styles.doc}>
         <h1>Termos e Condições</h1>
         <p className={styles.sub}>Sorteio do veículo · Projecto «Cansado → Lendário»</p>
-        <p className={styles.aviso}>
-          Versão de rascunho, a rever por assessoria jurídica antes da publicação
-          definitiva. Alguns pontos podem ser ajustados.
-        </p>
 
         <h2>1. Organizador e aceitação</h2>
         <p>
           O presente sorteio (a «Promoção») é organizado pela Fuel Injection Technology,
           representada por Heike Pinto, com sede em Maputo, Moçambique (o «Organizador»).
-          Contactos oficiais: heike.pinto@fuelinjectiontech.com · +258 84 30 30 504.
+          Contactos oficiais: heike.pinto@fuelinjectiontech.com · +258 84 30 30 504 ·
+          lendario.fuelinjectiontech.com.
         </p>
         <p>
           A participação na Promoção implica o conhecimento e a aceitação integral e sem
@@ -36,43 +33,51 @@ export default function Termos() {
         <p>
           O prémio consiste em um (1) veículo automóvel, um Mazda 3, restaurado e preparado
           no âmbito do projecto «Cansado → Lendário», entregue no estado em que for
-          apresentado na revelação oficial.
+          apresentado na revelação oficial («no estado em que se encontra»).
         </p>
         <ul>
-          <li>O prémio é pessoal e intransmissível até à entrega e não pode ser trocado por dinheiro ou por outro bem.</li>
-          <li>O veículo é entregue com a documentação aplicável, cabendo ao vencedor os passos da Cláusula 8.</li>
-          <li>O Organizador não presta qualquer garantia sobre o veículo para além do que resultar imperativamente da lei.</li>
+          <li>O prémio é pessoal e intransmissível até à entrega e não pode ser trocado por dinheiro ou por qualquer outro bem.</li>
+          <li>O veículo é entregue com a documentação legalmente aplicável, cabendo ao vencedor os passos descritos na Cláusula 8.</li>
+          <li>O Organizador não presta qualquer garantia sobre o veículo para além do que resultar imperativamente da lei aplicável.</li>
         </ul>
 
         <h2>3. Período de participação e data do sorteio</h2>
         <p>
-          O sorteio será realizado ao vivo durante o Fuel Injection Festival, no Autódromo
-          Internacional de Maputo, em Novembro de 2026. A data exacta será anunciada pelos
-          canais oficiais. O período de participação termina antes do sorteio, conforme
-          anunciado.
+          O período de participação decorre desde a abertura dos registos até ao encerramento
+          anunciado, na véspera do sorteio. O sorteio será realizado ao vivo durante o Fuel
+          Injection Festival, no Autódromo Internacional de Maputo, em Novembro de 2026. A
+          data exacta do sorteio será anunciada pelos canais oficiais do projecto.
         </p>
 
         <h2>4. Condições de elegibilidade</h2>
+        <p>Podem participar as pessoas que, cumulativamente:</p>
         <ul>
-          <li>Ter idade igual ou superior a 18 anos à data da participação.</li>
-          <li>Ser residente em Moçambique e possuir documento de identificação válido.</li>
-          <li>Para conduzir o veículo poderá ser exigida carta de condução válida; a titularidade do prémio não depende de saber conduzir.</li>
-          <li>Estão excluídos o Organizador, os patrocinadores e parceiros, os seus colaboradores e familiares directos.</li>
+          <li>Tenham idade igual ou superior a 18 anos à data da participação;</li>
+          <li>Sejam residentes em Moçambique e possuam documento de identificação válido;</li>
+          <li>Aceitem integralmente os presentes Termos e Condições.</li>
         </ul>
+        <p>
+          Para conduzir o veículo poderá ser exigida carta de condução válida; a titularidade
+          do prémio não depende de saber conduzir. Estão excluídos de participar o Organizador,
+          os patrocinadores e parceiros, os seus colaboradores e respectivos familiares
+          directos, de forma a garantir a idoneidade da Promoção.
+        </p>
 
         <h2>5. Como participar — obtenção de entradas</h2>
         <p>
-          Cada participante concorre através de «entradas», obtidas mediante compra nos
-          pontos de venda aderentes: cada compra elegível gera um ou mais códigos únicos que
-          atribuem entradas no sorteio.
+          Cada participante concorre através de «entradas» no sorteio, obtidas mediante compra
+          nos pontos de venda aderentes. Cada compra elegível, a partir do valor mínimo
+          anunciado, gera um ou mais códigos únicos, de acordo com a tabela de escalões
+          divulgada. Cada código atribui uma entrada no sorteio.
         </p>
         <ul>
-          <li>Cada código é único e de utilização única; não pode ser reutilizado.</li>
-          <li>O Organizador poderá anular entradas obtidas por fraude, duplicação ou manipulação, com registo e auditoria por ponto de venda.</li>
-          <li>Existe um limite de entradas por participante, associado ao contacto fornecido.</li>
+          <li>Cada código é único e de utilização única; não pode ser reutilizado nem transferido após registo.</li>
+          <li>O registo de um código é feito na plataforma oficial, mediante os dados exigidos, e fica concluído com a emissão do respectivo bilhete.</li>
+          <li>Existe um limite de trinta (30) entradas por participante, associado ao contacto e identificação fornecidos.</li>
+          <li>O Organizador poderá anular entradas obtidas por fraude, duplicação, manipulação ou incumprimento destas regras, mantendo registo e auditoria por ponto de venda.</li>
         </ul>
         <p>
-          Para participar são recolhidos dados pessoais (nome, contacto, data de nascimento
+          Para participar são recolhidos os dados pessoais (nome, contacto, data de nascimento
           e identificação) necessários à gestão do sorteio e à verificação do vencedor, nos
           termos da Cláusula 11.
         </p>
@@ -80,67 +85,99 @@ export default function Termos() {
         <h2>6. Realização do sorteio</h2>
         <p>
           O apuramento do vencedor será feito por sorteio aleatório, realizado ao vivo e de
-          forma transparente. Serão apurados um (1) vencedor e suplente(s), pela ordem de
-          extracção, para os casos previstos na Cláusula 7.
+          forma transparente, através da plataforma oficial do projecto. Serão apurados um (1)
+          vencedor e três (3) suplentes, pela ordem de extracção, para os casos previstos na
+          Cláusula 7.
         </p>
 
         <h2>7. Notificação e reclamação do prémio</h2>
         <ul>
-          <li>O vencedor será anunciado no momento do sorteio e contactado pelos dados fornecidos.</li>
-          <li>O prémio deve ser reclamado no prazo anunciado, com documento de identificação válido e comprovativo da entrada vencedora.</li>
-          <li>Se o vencedor não for encontrado, não reclamar no prazo, não reunir as condições ou recusar o prémio, o Organizador poderá atribuí-lo ao suplente seguinte ou realizar nova extracção.</li>
+          <li>O vencedor será anunciado no momento do sorteio e contactado através dos dados fornecidos no registo.</li>
+          <li>O prémio deve ser reclamado no prazo de trinta (30) dias, mediante apresentação de documento de identificação válido e do comprovativo da entrada vencedora.</li>
+          <li>Se o vencedor não for encontrado, não reclamar dentro do prazo, não reunir as condições de elegibilidade ou recusar o prémio, o Organizador atribuirá o prémio ao suplente seguinte, pela ordem de extracção.</li>
         </ul>
 
         <h2>8. Entrega do prémio e encargos</h2>
         <ul>
-          <li>A entrega ocorre após verificação da elegibilidade e assinatura de um Termo de Entrega e Aceitação.</li>
-          <li>São da responsabilidade do vencedor a transferência de propriedade e respectivo registo, bem como taxas, impostos e seguro que por lei lhe caibam.</li>
+          <li>A entrega ocorre após verificação da elegibilidade e assinatura de um Termo de Entrega e Aceitação que reproduz estas condições.</li>
+          <li>São da responsabilidade do vencedor a transferência de propriedade e respectivo registo, bem como as taxas, emolumentos, impostos e seguro que por lei lhe caibam, salvo indicação em contrário comunicada pelo Organizador no acto da entrega.</li>
           <li>O veículo é aceite «no estado em que se encontra» no momento da entrega.</li>
         </ul>
 
         <h2>9. Condições de posse do veículo</h2>
-        <p>Ao aceitar o prémio, o vencedor aceita as seguintes condições, que visam proteger o projecto e os patrocinadores:</p>
-        <p><strong>9.1 Manutenção da identidade visual.</strong> Manter no veículo, sem alteração ou remoção, a identidade visual do projecto e as marcas dos patrocinadores, por um período mínimo a definir a contar da entrega.</p>
-        <p><strong>9.2 Período de não-alienação.</strong> Não vender, doar, trocar ou transmitir o veículo a terceiros durante um período a definir a contar da entrega.</p>
-        <p><strong>9.3 Participação em conteúdos.</strong> Participar, de forma razoável, em conteúdos de divulgação da atribuição e entrega do prémio.</p>
-        <p><strong>9.4 Uso do veículo.</strong> Não utilizar o veículo para fins ilícitos e mantê-lo em conservação razoável.</p>
+        <p>
+          Ao aceitar o prémio, o vencedor aceita expressamente as seguintes condições, que
+          visam proteger o projecto e os patrocinadores:
+        </p>
+        <p>
+          <strong>9.1 Manutenção do livery e identidade visual.</strong> O vencedor
+          compromete-se a manter no veículo, sem alteração, remoção ou ocultação, a identidade
+          visual do projecto e as marcas dos patrocinadores, durante um período mínimo de seis
+          (6) meses a contar da data de entrega. Danos acidentais ao livery devem ser
+          comunicados ao Organizador para reposição.
+        </p>
+        <p>
+          <strong>9.2 Período de não-alienação.</strong> O vencedor compromete-se a não vender,
+          doar, trocar, onerar ou por qualquer forma transmitir o veículo a terceiros durante
+          um período de seis (6) meses a contar da data de entrega.
+        </p>
+        <p>
+          <strong>9.3 Participação em conteúdos de divulgação.</strong> O vencedor aceita
+          participar, de forma razoável, em conteúdos de divulgação relacionados com a
+          atribuição e entrega do prémio (fotografia e vídeo), bem como em conteúdos de
+          acompanhamento durante o período de manutenção do livery referido em 9.1.
+        </p>
+        <p>
+          <strong>9.4 Uso do veículo.</strong> O vencedor obriga-se a não utilizar o veículo
+          para fins ilícitos e a mantê-lo em estado de conservação razoável durante o período
+          previsto em 9.1.
+        </p>
 
         <h2>10. Direitos de imagem</h2>
         <p>
           O participante e, em especial, o vencedor autorizam o Organizador e os patrocinadores
-          a utilizar o seu nome e imagem nas comunicações do projecto, dentro dos limites legais.
+          a utilizar o seu nome e imagem (fotografia e vídeo) nas comunicações do projecto e
+          dos patrocinadores, sem contrapartida adicional, para divulgação da presente Promoção
+          e de edições futuras, dentro dos limites legais aplicáveis.
         </p>
 
         <h2>11. Protecção de dados pessoais</h2>
         <p>
-          Os dados recolhidos são tratados exclusivamente para a gestão da Promoção e, mediante
-          consentimento, para marketing do Organizador. São garantidos os direitos de acesso,
-          correcção e eliminação, através dos contactos da Cláusula 1.
+          Os dados pessoais recolhidos são tratados exclusivamente para a gestão da Promoção
+          (participação, verificação e entrega do prémio) e, mediante consentimento expresso e
+          separado, para fins de marketing do Organizador. Os dados são tratados de acordo com
+          a legislação aplicável, sendo garantidos ao titular os direitos de acesso, correcção
+          e eliminação, através dos contactos indicados na Cláusula 1.
         </p>
 
         <h2>12. Limitação de responsabilidade</h2>
         <p>
           Após a transferência de propriedade e entrega, o Organizador não é responsável por
-          factos, danos ou encargos relativos ao veículo, salvo o que resultar imperativamente
-          da lei. O Organizador não responde por falhas técnicas ou casos de força maior.
+          quaisquer factos, danos, avarias ou encargos relativos ao veículo, salvo o que
+          resultar imperativamente da lei. O Organizador não responde por falhas técnicas,
+          casos de força maior ou factos de terceiros que afectem a Promoção.
         </p>
 
         <h2>13. Alterações, suspensão e cancelamento</h2>
         <p>
           O Organizador reserva-se o direito de alterar datas ou mecânicas, ou de suspender ou
-          cancelar a Promoção, por motivo justificado, anunciando tais decisões pelos canais oficiais.
+          cancelar a Promoção, por motivo justificado (força maior, motivos legais, participação
+          insuficiente ou impossibilidade de realização), anunciando tais decisões pelos canais
+          oficiais.
         </p>
 
         <h2>14. Disposições gerais</h2>
         <p>
-          A participação implica a aceitação integral destes Termos. Se alguma cláusula for
-          inválida, as restantes mantêm-se em vigor.
+          A participação implica a aceitação integral destes Termos e Condições. Se alguma
+          cláusula for considerada inválida, as restantes mantêm-se em vigor. O Organizador
+          poderá esclarecer dúvidas de interpretação através dos contactos oficiais.
         </p>
 
         <h2>15. Lei aplicável e foro</h2>
         <p>
-          A Promoção rege-se pela lei da República de Moçambique, sendo competente o foro da
-          Comarca de Maputo, com renúncia a qualquer outro.
+          A presente Promoção rege-se pela lei da República de Moçambique. Para a resolução de
+          qualquer litígio será competente o foro da Comarca de Maputo, com renúncia expressa a
+          qualquer outro.
         </p>
 
         <p className={styles.rodape}>
