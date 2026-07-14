@@ -8,6 +8,11 @@ export const CONFIG = {
     { desde: 25000, ate: Infinity, entradas: 5 },
   ],
   TECTO_ENTRADAS_FACTURA: 5,
+  // Tecto de entradas por pessoa (por telefone). 30 = seis compras grandes de
+  // 25.000+ MZN. Apanha o abuso óbvio sem travar um comprador real. Ao aproximar-se
+  // deste número, gera-se um alerta para o admin rever.
+  TECTO_ENTRADAS_PESSOA: 30,
+  ALERTA_ENTRADAS_PESSOA: 20,   // a partir daqui, sinaliza para revisão
   LOTE_PRIMEIRO: 100,
   LOTE_PADRAO: 100,
   LOTE_MAX: 500,

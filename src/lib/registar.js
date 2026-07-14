@@ -86,6 +86,41 @@ export async function registarCodigo(input) {
 
     await c.query("UPDATE codigo SET estado = 'activado', activado_em = now() WHERE id = $1", [row.id]);
 
+    // Tecto por pessoa: contar entradas actuais deste participante.
+    // (Para um participante novo é 0, por isso nunca bloqueia à primeira.)
+    if (!participanteNovo) {
+      const cont = await c.query(
+        'SELECT count(*)::int AS n FROM entrada WHERE participante_id = $1',
+        [participante.id]
+      );
+      const jaTem = cont.rows[0].n;
+      if (jaTem >= CONFIG.TECTO_ENTRADAS_PESSOA) {
+        throw new RegistoError('tecto_pessoa', 429, { maximo: CONFIG.TECTO_ENTRADAS_PESSOA });
+      }
+      // Ao aproximar-se do tecto, sinaliza para o admin rever (não bloqueia).
+      if (jaTem + 1 >= CONFIG.ALERTA_ENTRADAS_PESSOA) {
+        // só cria se ainda não houver um alerta aberto para esta pessoa
+        const jaAlerta = await c.query(
+          `SELECT id FROM alerta WHERE tipo='tecto_pessoa' AND entidade='participante'
+             AND entidade_id=$1 AND resolvido=false LIMIT 1`,
+          [String(participante.id)]
+        );
+        const det = JSON.stringify({ entradas: jaTem + 1, tecto: CONFIG.TECTO_ENTRADAS_PESSOA });
+        if (jaAlerta.rowCount === 0) {
+          await c.query(
+            `INSERT INTO alerta (tipo, gravidade, entidade, entidade_id, detalhe)
+             VALUES ('tecto_pessoa', 'media', 'participante', $1, $2)`,
+            [String(participante.id), det]
+          );
+        } else {
+          await c.query(
+            'UPDATE alerta SET detalhe = $2, criado_em = now() WHERE id = $1',
+            [jaAlerta.rows[0].id, det]
+          );
+        }
+      }
+    }
+
     const ent = await c.query(
       `INSERT INTO entrada (participante_id, parceiro_id, codigo_id, via, hash_verificacao)
        VALUES ($1, $2, $3, $4, 'pendente') RETURNING id`,

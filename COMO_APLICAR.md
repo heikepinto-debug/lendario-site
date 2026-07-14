@@ -1,49 +1,69 @@
-# Logos dos parceiros + data "Novembro" + correcções
+# Painel de administração + anti-fraude
 
-Este delta traz os 5 logos, a data sem dia, e as correcções dos episódios/botão.
-Junta tudo o que estava pendente — aplica só este, esquece os anteriores.
+Peça grande e nova. Traz o painel de admin completo e as defesas anti-fraude que
+falámos: tecto por pessoa, alertas, e auditoria dos parceiros.
 
 ## Ficheiros
 
-**Novos (pasta de logos):**
+**Novos:**
 ```
-public/parceiros/fuel-injection-mono.png    public/parceiros/fuel-injection-cor.png
-public/parceiros/eltel-mono.png             public/parceiros/eltel-cor.png
-public/parceiros/jps-mono.png               public/parceiros/jps-cor.png
-public/parceiros/galp-mono.png              public/parceiros/galp-cor.png
-public/parceiros/the-shine-mono.png         public/parceiros/the-shine-cor.png
+src/lib/admin-auth.js                       login do admin
+src/lib/admin-sessao.js                     sessão do admin
+src/app/admin/page.js                       página de login
+src/app/admin/admin.module.css              estilos
+src/app/admin/painel/page.js                painel (protegido)
+src/app/admin/painel/painel-cliente.js      painel (interface)
+src/app/api/admin/login/route.js
+src/app/api/admin/logout/route.js
+src/app/api/admin/resumo/route.js
+src/app/api/admin/alertas/route.js
+src/app/api/admin/exportar/route.js
+drizzle/005_admin_e_antifraude.sql
+drizzle/006_criar_admin.sql
 ```
 
 **A substituir:**
 ```
-src/app/page.js            (logos + data "Novembro" + episódios + botão)
-src/app/page.module.css
+src/lib/registar.js    (passa a aplicar o tecto por pessoa + gerar alertas)
+src/lib/config.js      (tecto = 30 entradas por pessoa, alerta aos 20)
 ```
 
-## Como aplicar
+## Passos
 
-Pelo GitHub Desktop é mais fácil desta vez (há ficheiros de imagem):
-1. Copia a pasta `public/parceiros/` inteira para o teu projecto.
-2. Substitui `src/app/page.js` e `src/app/page.module.css`.
-3. Commit + push. O Vercel publica sozinho.
+### 1. SQL na Neon (por esta ordem)
+- `drizzle/005_admin_e_antifraude.sql`  → tabelas de admin, sessões e alertas
+- `drizzle/006_criar_admin.sql`         → cria a tua conta de admin
 
-(Se preferires o site do GitHub: os PNG podes arrastá-los para dentro da pasta
-`public/parceiros` na interface web, e editar os 2 ficheiros de código como sempre.)
+### 2. Código
+Copia os ficheiros (GitHub Desktop é mais fácil), commit + push. O Vercel publica.
 
-## Trocar entre monocromático e colorido
-
-No `src/app/page.js`, perto do topo, há esta linha:
+### 3. Entrar
 ```
-const ESTILO_LOGOS = 'mono';
+o-teu-site/admin
 ```
-Muda `'mono'` para `'cor'` e volta a publicar. Preparei as duas versões de todos
-os logos — trocar é só esta palavra. Vê no teu site qual preferes.
+- email: admin@fuelinjectiontech.com
+- senha: LendarioAdmin2026  ← troca depois (diz-me a nova e gero o SQL)
 
-## O que fica
+## O que o painel faz
 
-- Os 5 logos na secção de parceiros (Fuel Injection, Eltel, JPS, Galp, The Shine).
-- Data em "Novembro" (sem dia).
-- Episódios ordenados por data; botão de parceiros alinhado.
+- **Totais** — entradas, participantes, parceiros activos, alertas por rever.
+- **Salvaguarda** — botão para descarregar todas as entradas em CSV. Guarda isto
+  antes do sorteio: com ele, o sorteio corre mesmo sem internet no dia.
+- **Alertas** — sinaliza pessoas que se aproximam do tecto. Tu marcas "visto".
+- **Parceiros** — mostra a taxa de activação de cada um (vouchers emitidos vs.
+  mesmo usados). Uma taxa muito baixa com muitos vouchers = sinal de aviso.
+- **Quem tem mais entradas** — top de pessoas por nº de entradas.
 
-Se um parceiro carregar o próprio logo pelo portal, esse tem prioridade sobre
-o ficheiro — não há conflito.
+## As defesas anti-fraude (o que decidimos)
+
+- **Tecto de 30 entradas por pessoa** (por telefone). Alguém que tente passar disto
+  é bloqueado. 30 = seis compras grandes de 25.000+ MZN — nunca incomoda um
+  comprador real, só o abuso óbvio.
+- **Alerta aos 20** — quem chega perto do tecto aparece no teu painel para reveres.
+- **Sem fricção no balcão** — não pedimos factura ao parceiro, como querias. A
+  defesa contra vouchers inflacionados é a auditoria (taxa de activação) + o
+  limite de lote que já existe (primeiro lote automático, seguintes com a tua
+  aprovação).
+
+Se quiseres mudar o tecto (30) ou o limiar de alerta (20), estão no topo do
+`src/lib/config.js` — dois números.

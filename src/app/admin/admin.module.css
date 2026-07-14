@@ -1,0 +1,55 @@
+/* login */
+.authWrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.authCard{width:100%;max-width:380px;border:1px solid var(--line);background:#fff;padding:38px 32px}
+.brand{font-family:var(--display);font-size:17px;letter-spacing:.05em}
+.brand span{color:var(--olive)}
+.adminTag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.16em;color:#fff;background:var(--ink);padding:3px 8px;border-radius:3px;margin:14px 0 24px}
+.authCard label{display:block;font-size:13px;font-weight:600;margin:16px 0 6px}
+.authCard input{width:100%;font-family:var(--body);font-size:16px;padding:12px 13px;border:1px solid var(--line);border-radius:2px}
+.authCard input:focus{border-color:var(--olive)}
+.btn{width:100%;font-family:var(--body);font-weight:600;font-size:15px;padding:14px;margin-top:24px;background:var(--ink);color:#fff;border:none;border-radius:2px;cursor:pointer}
+.btn:hover{opacity:.9}
+.btn:disabled{background:var(--grey);cursor:wait}
+.err{margin-top:14px;font-size:13.5px;color:var(--red)}
+
+/* painel */
+.painel{min-height:100vh}
+.painelTop{display:flex;justify-content:space-between;align-items:center;padding:20px 28px;border-bottom:1px solid var(--line)}
+.sair{font-family:var(--body);font-size:13px;font-weight:600;color:var(--grey);background:none;border:1px solid var(--line);padding:8px 16px;border-radius:99px;cursor:pointer}
+.sair:hover{color:var(--ink);border-color:var(--ink)}
+.painelWrap{max-width:900px;margin:0 auto;padding:36px 28px 80px}
+
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:36px}
+.card{background:#fff;padding:22px 18px;text-align:center}
+.cardN{font-family:var(--display);font-size:38px;color:var(--olive);line-height:1}
+.cardL{font-size:12px;color:var(--grey);margin-top:8px}
+.cardAlerta .cardN{color:var(--red)}
+.cardAlerta{background:#FBEEEA}
+
+.bloco{margin-bottom:40px}
+.bloco h2{font-family:var(--display);font-size:22px;text-transform:uppercase;margin-bottom:8px}
+.blocoHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.nota{font-size:13px;color:var(--grey);line-height:1.55;margin-bottom:16px}
+.btnExport{font-size:13px;font-weight:600;color:#fff;background:var(--olive);padding:10px 18px;border-radius:2px;text-decoration:none;white-space:nowrap}
+.btnExport:hover{background:var(--olive-d)}
+
+.alertas{display:flex;flex-direction:column;gap:8px}
+.alerta{display:flex;justify-content:space-between;align-items:center;background:#FBF6EA;border:1px solid var(--amber);padding:14px 16px;border-radius:2px}
+.alertaTipo{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--amber-d);margin-right:12px}
+.alertaNome{font-weight:600;font-size:14px}
+.alertaDet{font-size:13px;color:var(--grey);margin-left:12px}
+.resolver{font-family:var(--body);font-size:12px;font-weight:600;color:var(--grey);background:#fff;border:1px solid var(--line);padding:7px 14px;border-radius:99px;cursor:pointer}
+.resolver:hover{color:var(--ink);border-color:var(--ink)}
+
+.tabela{width:100%;border-collapse:collapse;font-size:14px}
+.tabela th{text-align:left;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--grey);padding:0 12px 10px;border-bottom:1px solid var(--line)}
+.tabela th:not(:first-child),.tabela td:not(:first-child){text-align:right}
+.tabela td{padding:12px;border-bottom:1px solid var(--line)}
+.taxaMa{color:var(--red);font-weight:700}
+.inativo{font-style:normal;font-size:12px;color:var(--amber-d)}
+
+@media(max-width:640px){
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .blocoHead{flex-direction:column;align-items:flex-start;gap:10px}
+  .tabela{font-size:12.5px}
+}
