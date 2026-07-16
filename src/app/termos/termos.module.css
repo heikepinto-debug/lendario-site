@@ -19,3 +19,4 @@
 @media(max-width:560px){
   .doc h1{font-size:32px}
 }
+.nota9{background:#F4F3EE;border-left:3px solid var(--olive);padding:14px 16px;font-size:13.5px;line-height:1.6;color:var(--grey);margin-top:8px;font-style:italic}
