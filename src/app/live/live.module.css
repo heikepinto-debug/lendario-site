@@ -1,0 +1,98 @@
+/* Página de palco: pensada para ecrã grande e para transmissão.
+   Tudo é grande, com muito contraste, e escala com a largura do ecrã (vw)
+   para funcionar num telemóvel, num portátil ou num ecrã de 4 metros. */
+
+.palco{
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:4vh 4vw;text-align:center;position:relative;
+}
+.aCarregar{font-family:var(--display);font-size:6vw;color:var(--line)}
+
+.marca{
+  position:absolute;top:4vh;left:0;right:0;
+  font-family:var(--display);font-size:clamp(14px,1.6vw,26px);
+  letter-spacing:.08em;color:var(--grey);
+}
+.marca span{color:var(--olive)}
+
+.centro{width:100%;max-width:1400px}
+
+.etiqueta{
+  font-size:clamp(11px,1.1vw,18px);font-weight:700;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--amber-d);margin-bottom:1.5vh;
+}
+.numeroGigante{
+  font-family:var(--display);font-size:clamp(72px,16vw,260px);line-height:.9;
+  color:var(--ink);letter-spacing:-.01em;
+}
+.legenda{font-size:clamp(14px,1.8vw,30px);color:var(--grey);margin-top:1.5vh}
+.rodapeNota{margin-top:4vh;font-size:clamp(12px,1.2vw,18px);color:var(--grey)}
+
+/* compromisso público */
+.compromisso{
+  margin:5vh auto 0;max-width:760px;text-align:left;
+  background:#fff;border:1px solid var(--line);padding:3vh 3vw;
+}
+.compTitulo{
+  font-size:clamp(10px,.9vw,14px);font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--olive-d);margin-bottom:1.2vh;
+}
+.compromisso p{font-size:clamp(13px,1.15vw,19px);line-height:1.6;color:var(--ink);margin:0 0 2vh}
+.hashes{display:flex;flex-direction:column;gap:.8vh}
+.hashes div{display:flex;justify-content:space-between;align-items:center;gap:2vw}
+.hashes span{font-size:clamp(10px,.85vw,14px);color:var(--grey);text-transform:uppercase;letter-spacing:.1em}
+.hashes code{font-family:var(--mono);font-size:clamp(11px,1vw,16px);color:var(--ink)}
+
+/* suspense */
+.aSortear{
+  font-family:var(--display);font-size:clamp(48px,11vw,180px);line-height:1;
+  color:var(--olive);letter-spacing:.02em;
+}
+.pontos{display:flex;gap:1.4vw;justify-content:center;margin-top:4vh}
+.pontos i{
+  width:clamp(10px,1.4vw,22px);height:clamp(10px,1.4vw,22px);border-radius:50%;
+  background:var(--olive);animation:pulsar 1.2s ease-in-out infinite;
+}
+.pontos i:nth-child(2){animation-delay:.2s}
+.pontos i:nth-child(3){animation-delay:.4s}
+@keyframes pulsar{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
+
+/* resultado */
+.bilheteVencedor{
+  font-family:var(--display);font-size:clamp(64px,15vw,240px);line-height:.95;
+  color:var(--olive);letter-spacing:.01em;
+  animation:entrar .7s cubic-bezier(.2,.8,.2,1) both;
+}
+.nomeVencedor{
+  font-family:var(--display);font-size:clamp(28px,5vw,80px);line-height:1.1;
+  color:var(--ink);margin-top:1vh;
+  animation:entrar .7s .15s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes entrar{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+
+.suplentes{margin-top:6vh;animation:entrar .6s .5s cubic-bezier(.2,.8,.2,1) both}
+.supTitulo{
+  font-size:clamp(10px,.9vw,14px);font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--grey);margin-bottom:1.5vh;
+}
+.supLista{display:flex;flex-direction:column;gap:.8vh;max-width:640px;margin:0 auto}
+.sup{
+  display:grid;grid-template-columns:auto 1fr auto;gap:2vw;align-items:center;
+  background:#fff;border:1px solid var(--line);padding:1.4vh 2vw;
+}
+.supPos{font-family:var(--display);font-size:clamp(14px,1.4vw,22px);color:var(--amber-d)}
+.supBilhete{font-family:var(--mono);font-size:clamp(14px,1.5vw,24px);color:var(--ink);text-align:left}
+.supNome{font-size:clamp(12px,1.2vw,19px);color:var(--grey)}
+
+.verificar{
+  margin-top:6vh;font-size:clamp(10px,.9vw,15px);color:var(--grey);
+  line-height:1.8;
+}
+.verificar code{font-family:var(--mono);color:var(--ink)}
+
+@media(max-width:640px){
+  .hashes div{flex-direction:column;align-items:flex-start;gap:.3vh}
+  .sup{grid-template-columns:auto 1fr;gap:3vw}
+  .supNome{grid-column:2;text-align:left;font-size:13px}
+}

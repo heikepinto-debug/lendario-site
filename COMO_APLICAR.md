@@ -1,39 +1,97 @@
-# Termos e Condições — versão final robusta
+# Motor do sorteio + cerimónia ao vivo  (+ T&C finais)
 
-Dois ficheiros a substituir. Já tens o delta8 aplicado, por isso todo o resto
-(link no rodapé, checkbox no registo, idade 18+) já funciona — isto só actualiza
-o texto e o estilo da página dos termos.
+A peça que faltava: extrair o vencedor, de forma que ninguém possa pôr em causa.
+Inclui também os T&C na versão final (que ainda não tinhas aplicado).
 
-## Ficheiros a substituir
+## Ficheiros
+
+**Novos:**
 ```
-src/app/termos/page.js               (texto final dos T&C)
-src/app/termos/termos.module.css     (novo estilo para a nota da cláusula 9)
+src/lib/sorteio.js                      o motor (compromisso, extracção, verificação)
+src/app/live/page.js                    página da cerimónia
+src/app/live/live-cliente.js
+src/app/live/live.module.css
+src/app/api/admin/sorteio/route.js      fechar / sortear (só admin)
+src/app/api/live/sorteio/route.js       estado público (para /live e para verificação)
+drizzle/009_sorteio.sql
 ```
 
-## Como aplicar
-GitHub Desktop: substitui os 2 ficheiros, commit + push. O Vercel republica.
-(Ou no site do GitHub, edita cada um: apaga tudo, cola o novo, commit.)
+**A substituir:**
+```
+src/app/admin/painel/painel-cliente.js  (+ bloco "O sorteio")
+src/app/admin/admin.module.css
+src/app/termos/page.js                  (versão final dos T&C)
+src/app/termos/termos.module.css
+```
 
-## O que ficou na versão final (as tuas decisões)
+## Passos
 
-- **Cláusula 2 — sem garantia, reforçada.** Fica em destaque que o carro vai
-  "no estado em que se encontra", sem garantia nenhuma, e o vencedor aceita
-  eventuais defeitos, presentes ou futuros. É o teu escudo.
-- **Cláusula 8 — documentos preenchidos.** O Organizador entrega a papelada de
-  transferência já preenchida a favor do vencedor; ele só submete e paga as taxas
-  oficiais dessa submissão. O seguro depois da entrega é dele.
-- **Cláusula 4 — exclusões alargadas** a cônjuge, ascendentes, descendentes E irmãos.
-- **Cláusula 5 — compra elegível clarificada:** só compras pagas e não reembolsadas
-  contam. Compras devolvidas perdem as entradas. Lista de parceiros remetida ao site.
-- **Cláusula 9 — condições firmes, sem multa.** As regras (livery, não-venda,
-  conteúdos) são condições firmes da entrega, mas sem penalização em dinheiro. Uma
-  nota explica que assentam na boa-fé, e que podes retirar o apoio público em caso
-  de incumprimento — dá-te alguma força sem ser um processo em tribunal.
-- **Cláusula 7 — contacto ao vencedor** deixado razoável mas genérico (tentativas e
-  prazo a comunicar no sorteio), com passagem ao suplente se não for contactável.
-- **Sem valor do prémio** indicado, como pediste.
+### 1. SQL na Neon
+`drizzle/009_sorteio.sql`
 
-## Continua para o jurista (não trava o site)
-A questão fiscal do prémio e a confirmação sobre a necessidade de via gratuita em
-Moçambique. A cláusula 9.2 agora é compromisso firme sem multa — se um dia quiseres
-que tenha força de tribunal, aí sim precisa do jurista para o mecanismo.
+ATENÇÃO — lê isto: o esquema original já tinha uma tabela `sorteio`, criada de
+raiz mas nunca usada. O desenho dela não serve (não guarda o compromisso público
+e só prevê 2 suplentes, quando os T&C dizem 3). Esta migração substitui-a, mas
+**só se estiver vazia** — se tiver algum sorteio registado, pára com erro e não
+destrói nada. Como nunca correste um sorteio, deve passar sem problema.
+
+### 2. Código
+GitHub Desktop: copia tudo, commit + push.
+
+---
+
+## Como funciona o sorteio (importante perceberes)
+
+O problema: como é que alguém acredita que não escolheste o vencedor?
+A resposta é **compromisso prévio**. São dois momentos:
+
+### Momento 1 — FECHAR (fazes isto quando os registos terminarem)
+No painel de admin, "Fechar o sorteio". A partir daí:
+- A lista de bilhetes **congela** e calcula-se a sua impressão digital (lista_hash).
+- Gera-se uma semente secreta e publica-se **só o hash dela** (semente_hash).
+- Ambos ficam visíveis em /live, ANTES da extracção.
+
+O que isto garante: já não podes acrescentar bilhetes (mudaria o lista_hash) nem
+trocar a semente (mudaria o semente_hash). Estás preso ao que publicaste.
+
+### Momento 2 — SORTEAR (no palco, ao vivo)
+No painel, "CORRER O SORTEIO". O sistema:
+- Confirma que a lista não mudou desde o fecho (se mudou, **recusa correr**).
+- Revela a semente e faz a conta: vencedor + 3 suplentes.
+- A página /live revela sozinha, com 4 segundos de suspense.
+
+### Depois — qualquer pessoa verifica
+Com o CSV das entradas (o teu botão "exportar"), a semente revelada e os hashes
+publicados, qualquer pessoa refaz a conta e chega ao mesmo vencedor. Se tivesses
+batoteado, as contas não fechavam.
+
+## A página /live
+
+`o-teu-site/live` — feita para ecrã grande e transmissão. Escala sozinha do
+telemóvel ao ecrã de 4 metros. Três estados, muda sozinha:
+- **Aberto** → contador de entradas ao vivo
+- **Fechado** → total de bilhetes + o compromisso público
+- **Sorteado** → suspense, depois o bilhete vencedor e os suplentes
+
+Podes abri-la no ecrã do palco e na transmissão ao mesmo tempo. Não precisa de
+ninguém a carregar em nada: quando corres o sorteio no painel, ela revela sozinha.
+
+## No dia — sugestão de guião
+
+1. Antes: "Fechar o sorteio" no painel. Mostra o /live com o compromisso.
+2. Explica ao público: "a semente já está selada, nem nós sabemos quem ganha".
+3. No momento: "CORRER O SORTEIO" (pede confirmação escrita — não há enganos).
+4. O /live faz o suspense e revela.
+5. Depois: a semente fica pública. Quem quiser, confirma.
+
+## Salvaguarda
+O botão "exportar CSV" continua a ser a tua rede de segurança. **Descarrega o CSV
+depois de fechares** — é a lista oficial, e é com ela que a verificação se faz.
+
+## Testado
+- Determinismo (mesma semente = mesmo vencedor, sempre)
+- Sem repetições (ninguém sai duas vezes)
+- Aleatoriedade: teste qui-quadrado com 100.000 sorteios — uniforme
+- Sem favorecimento: 200.000 sorteios, nenhum bilhete sistematicamente à frente
+- Detecção de batota: acrescentar bilhete ou trocar semente são ambos apanhados
+- Fluxo completo com 500 entradas de 200 pessoas

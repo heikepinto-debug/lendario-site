@@ -10,20 +10,64 @@ export default function PainelAdmin() {
   const [alertas, setAlertas] = useState([]);
   const [lotes, setLotes] = useState([]);
   const [participantes, setParticipantes] = useState(null);
+  const [sorteio, setSorteio] = useState(null);
+  const [aSortear, setASortear] = useState(false);
+  const [msgSorteio, setMsgSorteio] = useState('');
   const [aDar, setADar] = useState(null); // id do parceiro a receber lote
   const [msgLote, setMsgLote] = useState('');
 
   async function carregar() {
-    const [r1, r2, r3, r4] = await Promise.all([
+    const [r1, r2, r3, r4, r5] = await Promise.all([
       fetch('/api/admin/resumo').then((r) => r.json()),
       fetch('/api/admin/alertas').then((r) => r.json()),
       fetch('/api/admin/lotes').then((r) => r.json()),
       fetch('/api/admin/participantes').then((r) => r.json()),
+      fetch('/api/admin/sorteio').then((r) => r.json()),
     ]);
     if (r1.ok) setDados(r1);
     if (r2.ok) setAlertas(r2.alertas);
     if (r3.ok) setLotes(r3.parceiros);
     if (r4.ok) setParticipantes(r4);
+    if (r5.ok) setSorteio(r5.sorteio);
+  }
+
+  // Acções do sorteio. São irreversíveis — por isso pedem confirmação escrita.
+  async function accaoSorteio(accao) {
+    const perguntas = {
+      fechar: 'FECHAR o sorteio?\n\nA lista de bilhetes fica congelada e não entram mais registos neste sorteio. Escreve FECHAR para confirmar:',
+      sortear: 'CORRER O SORTEIO?\n\nIsto extrai o vencedor e os suplentes. Não tem volta atrás. Escreve SORTEAR para confirmar:',
+    };
+    const esperado = accao.toUpperCase();
+    const resposta = window.prompt(perguntas[accao]);
+    if (resposta !== esperado) { setMsgSorteio('Cancelado.'); return; }
+
+    setASortear(true);
+    setMsgSorteio('');
+    try {
+      const r = await fetch('/api/admin/sorteio', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ accao }),
+      });
+      const d = await r.json();
+      if (d.ok) {
+        setMsgSorteio(accao === 'fechar'
+          ? `✓ Sorteio fechado com ${d.total_entradas} bilhetes. O compromisso está publicado em /live.`
+          : `✓ Sorteio realizado. Vencedor: ${d.resultados[0].bilhete}`);
+        await carregar();
+      } else {
+        const erros = {
+          ja_fechado: 'O sorteio já está fechado.',
+          nao_fechado: 'Tens de fechar o sorteio antes de o correr.',
+          sem_entradas: 'Não há entradas para sortear.',
+          lista_alterada: 'ATENÇÃO: a lista de bilhetes mudou desde o fecho. O sorteio não corre. Contacta o suporte.',
+        };
+        setMsgSorteio(erros[d.erro] || 'Não foi possível.');
+      }
+    } catch {
+      setMsgSorteio('Sem ligação.');
+    }
+    setASortear(false);
   }
 
   useEffect(() => { carregar(); }, []);
@@ -90,6 +134,59 @@ export default function PainelAdmin() {
           <div className={`${styles.card} ${t.alertas_abertos > 0 ? styles.cardAlerta : ''}`}>
             <div className={styles.cardN}>{t.alertas_abertos}</div><div className={styles.cardL}>Alertas por rever</div>
           </div>
+        </section>
+
+        {/* o sorteio */}
+        <section className={styles.bloco}>
+          <h2>O sorteio</h2>
+          {!sorteio || sorteio.estado === 'aberto' ? (
+            <>
+              <p className={styles.nota}>
+                O sorteio está <strong>aberto</strong> — ainda entram registos. Quando
+                fechares, a lista de bilhetes congela e publica-se o compromisso público
+                (ninguém, nem tu, consegue saber o vencedor antes da extracção).
+                <br />Fecha só quando o período de participação terminar.
+              </p>
+              <button onClick={() => accaoSorteio('fechar')} disabled={aSortear} className={styles.btnPerigo}>
+                Fechar o sorteio
+              </button>
+            </>
+          ) : sorteio.estado === 'fechado' ? (
+            <>
+              <p className={styles.nota}>
+                Lista <strong>fechada</strong> com {sorteio.total_entradas} bilhetes. O
+                compromisso está publicado em <a href="/live" target="_blank" rel="noreferrer">/live</a>.
+                Corre o sorteio no momento da cerimónia — a página /live revela sozinha.
+              </p>
+              <div className={styles.hashesAdmin}>
+                <div><span>Lista</span><code>{sorteio.lista_hash?.slice(0, 16)}…</code></div>
+                <div><span>Semente selada</span><code>{sorteio.semente_hash?.slice(0, 16)}…</code></div>
+              </div>
+              <button onClick={() => accaoSorteio('sortear')} disabled={aSortear} className={styles.btnSortear}>
+                {aSortear ? 'A sortear…' : 'CORRER O SORTEIO'}
+              </button>
+            </>
+          ) : (
+            <>
+              <p className={styles.nota}>
+                Sorteio <strong>realizado</strong> em {new Date(sorteio.sorteado_em).toLocaleString('pt-PT')}.
+                O resultado e a semente estão públicos em <a href="/live" target="_blank" rel="noreferrer">/live</a>.
+              </p>
+              <table className={styles.tabela}>
+                <thead><tr><th>Posição</th><th>Bilhete</th><th>Nome</th></tr></thead>
+                <tbody>
+                  {sorteio.resultados?.map((r) => (
+                    <tr key={r.posicao}>
+                      <td>{r.posicao === 0 ? <strong>Vencedor</strong> : `${r.posicao}.º suplente`}</td>
+                      <td>{r.bilhete}</td>
+                      <td>{r.nome}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          )}
+          {msgSorteio && <p className={styles.painelMsg}>{msgSorteio}</p>}
         </section>
 
         {/* exportar */}

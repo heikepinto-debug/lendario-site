@@ -58,3 +58,15 @@
 .darBtn:hover{background:var(--olive);color:#fff}
 .darBtn:disabled{opacity:.5;cursor:wait}
 .painelMsg{font-size:14px;margin:8px 0}
+
+/* sorteio */
+.btnPerigo{font-family:var(--body);font-size:14px;font-weight:700;color:#fff;background:var(--amber-d);border:none;padding:13px 24px;border-radius:2px;cursor:pointer;margin-top:6px}
+.btnPerigo:hover{opacity:.9}
+.btnPerigo:disabled{background:var(--grey);cursor:wait}
+.btnSortear{font-family:var(--display);font-size:20px;letter-spacing:.06em;color:#fff;background:var(--olive);border:none;padding:18px 40px;border-radius:2px;cursor:pointer;margin-top:16px}
+.btnSortear:hover{background:var(--olive-d)}
+.btnSortear:disabled{background:var(--grey);cursor:wait}
+.hashesAdmin{display:flex;flex-direction:column;gap:6px;background:#F4F3EE;border:1px solid var(--line);padding:14px 16px;margin:14px 0}
+.hashesAdmin div{display:flex;justify-content:space-between;gap:20px}
+.hashesAdmin span{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--grey)}
+.hashesAdmin code{font-family:var(--mono);font-size:12.5px;color:var(--ink)}
